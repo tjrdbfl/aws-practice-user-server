@@ -26,15 +26,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  console.log(parseCookies().message)
   return (
     <html lang="en">
       <body className={inter.className}>
-        {parseCookies().message!=="SUCCESS" && <Header/>}
-        {parseCookies().message==="ADMIN" && <DashHeader/>}
         <div className="mt-100">
-        <ReduxProvider> {children}</ReduxProvider>
-      </div>
+          <ReduxProvider>
+            {/* 조건이 참일 때 뒤에 요소 렌더링 */}
+            {parseCookies().message === "SUCCESS" && <Header />}
+
+            {children}
+          </ReduxProvider>
+        </div>
       </body>
     </html>
   );

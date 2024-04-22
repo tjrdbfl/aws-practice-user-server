@@ -30,14 +30,14 @@ const JoinPage: NextPage = () =>  {
 
   const handleSubmit = (e:any) => {
     e.preventDefault()
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/users/save`
-    const data = { username, password, name, phone, job} // data = requestbody
-    const config = AxiosConfig()
-    axios.post(url, data, config)
-      .then(res => {
-        alert("response가 가져온 ID : " + JSON.stringify(res.data)) // response.responsebody = res.data = hashmap
-        router.push(`${PG.USER}/login`)
-      })
+    // const url = `${process.env.NEXT_PUBLIC_API_URL}/users/save`
+    // const data = { username, password, name, phone, job} // data = requestbody
+    // const config = AxiosConfig()
+    // axios.post(url, data, config)
+    //   .then(res => {
+    //     alert("response가 가져온 ID : " + JSON.stringify(res.data)) // response.responsebody = res.data = hashmap
+    //     router.push(`${PG.USER}/login`)
+    //   })
   }
 
 

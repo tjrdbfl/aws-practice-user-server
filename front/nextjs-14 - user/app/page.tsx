@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { PG } from "./components/common/enums/PG";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,6 @@ import { findLogin, findUserByPassword, findUserByUsername } from "./components/
 import { IUser } from "./components/user/model/user";
 import { parseCookies, destroyCookie, setCookie } from "nookies";
 import { jwtDecode } from "jwt-decode";
-import { PRERENDER_MANIFEST } from "next/dist/shared/lib/constants";
 
 export default function Home() {
   const router = useRouter();
@@ -17,12 +16,15 @@ export default function Home() {
   const dispatch = useDispatch()
   const auth = useSelector(getAuth)
   const resultId = useSelector(getUserMessage);
-  const resultPw = useSelector(getUserMessage);
   const [idMsg, setIdMsg] = useState({ "message": '', "check": false });
   const [pwMsg, setPwMsg] = useState({ "message": '', "check": false });
 
   const [user, setUser] = useState({} as IUser)
   const [length, setLength] = useState({ "idLength": false, "pwLength": false })
+
+  //useRef : 초기화
+  const idRef=useRef<HTMLInputElement>(null);
+  const pwRef=useRef<HTMLInputElement>(null);
 
   const handleUsername = (e: any) => {
     const ID_CHECK = /^([a-z]+(?=.*?[a-z])(?=.*?[0-9])).{5,19}$/g;
@@ -65,50 +67,68 @@ export default function Home() {
   }
 
   const handleSubmit = () => {
-    dispatch(findLogin(user)); 
+    dispatch(findUserByUsername(user.username))  //옵저버 패턴
+    .then((res:any)=>{
+      if(res.payload==='SUCCESS'){
+        dispatch(findLogin(user))
+        .then((res:any)=>{
+          if (res.payload.message === 'SUCCESS') {
+            setCookie({}, 'message', res.payload.message, { httpOnly: false, path: '/' })
+            setCookie({}, 'accessToken', res.payload.accessToken, { httpOnly: false, path: '/' })
+            console.log('서버에서 넘어온 메세지' + parseCookies().message)
+            console.log('서버에서 넘어온 토큰 2'+parseCookies().accessToken)
+            console.log(jwtDecode<any>(parseCookies().accessToken))
+            setIdMsg({...idMsg,message:"존재하는 ID",check:true})
+            setPwMsg({...pwMsg,message:"존재하는 PW",check:true})
+            router.push(`${PG.BOARD}/list`)
+      
+          } else if(res.payload.message === 'ADMIN'){
+            console.log(res.payload)
+            console.log(auth.message)
+            console.log('LOGIN FAIL')
+            if (pwRef.current) {
+              pwRef.current.value = ""
+            }
+            alert("로그인을 실패하셨습니다")
+            setIdMsg({...idMsg,message:"존재하는 ID",check:true})
+            setPwMsg({...pwMsg,message:"존재하지 않는 PW 입니다.",check:false})
+          }
+        })
+        .catch((err:any)=>{
+          
+        })  
+      }else if(res.payload==='FAILURE'){
+        if (idRef.current) {
+          idRef.current.value = ""
+        }
+        if (pwRef.current) {
+          pwRef.current.value = ""
+        }
+        console.log(auth.message)
+        console.log('LOGIN FAIL')
+        alert("로그인을 실패하셨습니다")
+        setIdMsg({...idMsg,message:"존재하지 않는 ID 입니다. 회원가입 해주세요.",check:false})
+        setPwMsg({...pwMsg,message:"존재하지 않는 PW 입니다.",check:false})
+      }
+      
+    })
+    .catch((err:any)=>{
+
+    })
+    .finally(()=>{
+      console.log('최종적으로 반드시 이뤄줘야 할 로직')  
+    })
+  
+   
   }
 
-  useEffect(()=>{
-    if(resultId !== 'SUCCESS' && resultId !== 'FAILURE'){
-      dispatch(findUserByUsername(user.username)); 
-    }
-  },[])
 
-  useEffect(() => {
-    if (resultId === 'SUCCESS') {
-      dispatch(findUserByPassword(user));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (resultId === 'SUCCESS') {
+  //     dispatch(findUserByPassword(user));
+  //   }
+  // }, []);
 
-
-  useEffect(() => {
-    if (auth.message === 'SUCCESS') {
-
-      setCookie({}, 'message', auth.message, { httpOnly: false, path: '/' })
-      setCookie({}, 'token', auth.token, { httpOnly: false, path: '/' })
-      console.log('서버에서 넘어온 메세지' + parseCookies().message)
-      console.log('서버에서 넘어온 토큰' + parseCookies().token)
-      console.log(jwtDecode<any>(parseCookies().token)?.username)
-      setIdMsg({...idMsg,message:"존재하는 ID",check:true})
-      setPwMsg({...pwMsg,message:"존재하는 PW",check:true})
-      router.push(`${PG.BOARD}/list`)
-
-    } else if(auth.message === 'ADMIN'){
-
-      console.log(auth.message)
-      console.log('LOGIN FAIL')
-      alert("로그인을 실패하셨습니다")
-      setIdMsg({...idMsg,message:"존재하는 ID",check:true})
-      setPwMsg({...pwMsg,message:"존재하지 않는 PW 입니다.",check:false})
-    } else if(auth.message === 'FAILURE'){
-
-      console.log(auth.message)
-      console.log('LOGIN FAIL')
-      alert("로그인을 실패하셨습니다")
-      setIdMsg({...idMsg,message:"존재하지 않는 ID 입니다. 회원가입 해주세요.",check:false})
-      setPwMsg({...pwMsg,message:"존재하지 않는 PW 입니다.",check:false})
-    }
-  }, [auth])
 
   return (
     <div className="flex items-center justify-center h-[80vh] w-full px-5 sm:px-0">
@@ -126,18 +146,24 @@ export default function Home() {
               ID
             </label>
             <input
+            ref={idRef}
               onChange={handleUsername}
               className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-2 focus:outline-blue-700"
               type="email"
               required
             />
           </div>
-          {length.idLength ?
+          {/* {length.idLength ?
             (resultId === 'SUCCESS' ? (
               <p className="text-blue-500 font-weight-500 mt-2">{idMsg.message}</p>
             ) : resultId === 'FAILURE' ? (
               <p className="text-red-500 font-weight-500 mt-2">{idMsg.message}</p>
             ) : 
+              !idMsg?.check ? (<p className="text-red-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>)
+                : <p className="text-blue-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>
+            ) : null} */}
+          {length.idLength ?
+            (
               !idMsg?.check ? (<p className="text-red-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>)
                 : <p className="text-blue-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>
             ) : null}
@@ -149,16 +175,13 @@ export default function Home() {
             </div>
 
             <input
+            ref={pwRef}
               onChange={handlePassword}
               className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-2 focus:outline-blue-700"
               type="password"
             />
             {length.pwLength ? (
-              resultPw === 'SUCCESS' ? (
-                <p className="text-blue-500 font-weight-500 mt-2">{pwMsg.message}</p>
-              ) : resultPw === 'FAILURE' ? (
-                <p className="text-red-500 font-weight-500 mt-2">{pwMsg.message}</p>
-              ) : <div>
+              <div>
                 {!pwMsg?.check ? <p className="text-red-500 font-weight-500 font-size-10 mt-2">{pwMsg.message}</p>
                   : <p className="text-blue-500 font-weight-500 font-size-10 mt-2">{pwMsg.message}</p>}
               </div>

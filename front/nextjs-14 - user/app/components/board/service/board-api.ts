@@ -1,4 +1,4 @@
-import { instance } from '@/app/components/common/configs/axios-config'
+import instance from '@/app/components/common/configs/axios-config'
 import { IBoard } from '../model/board'
 
 export const findAllBoardsAPI = async (page: number) =>{     // axios = 동기식, 
