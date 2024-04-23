@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "article")
 @AllArgsConstructor
 public class User extends BaseEntity {
 
     @Id
-    @Column(name = "user_id", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
@@ -24,6 +24,7 @@ public class User extends BaseEntity {
     private String name;
     private String phone;
     private String job;
+    private String token;
 
     //부모가 바뀌면 자식도 바뀌게 한다.
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

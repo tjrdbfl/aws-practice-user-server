@@ -1,16 +1,13 @@
 package com.example.demo.board;
 
 import com.example.demo.board.model.BoardDto;
-import com.example.demo.board.service.BoardService;
 import com.example.demo.board.service.BoardServiceImpl;
 import com.example.demo.common.components.Messenger;
-import com.example.demo.common.components.PageRequestVo;
-import com.example.demo.user.model.UserDto;
+import com.example.demo.common.components.pagination.PageRequestVo;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +64,7 @@ public class BoardController {
         public ResponseEntity<Messenger> count()  {
         return ResponseEntity.ok(service.count());
     }
+
     @GetMapping("/exists/{id}")
     public ResponseEntity<Messenger> existsById(PageRequestVo vo){
         service.existById(0L);

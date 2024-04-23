@@ -11,12 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString(exclude = {"id"})
+@ToString(exclude = {"id","articles"})
 @Entity(name="boards")
 @Builder
 public class Board extends BaseEntity {
     @Id
-    @Column(name = "board_id", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "title")

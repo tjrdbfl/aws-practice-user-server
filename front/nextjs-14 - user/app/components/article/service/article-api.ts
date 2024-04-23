@@ -3,7 +3,7 @@ import { IArticle } from '../model/article'
 
 export const findAllArticlesAPI = async (page: number) =>{     // axios = 동기식, 
     try{                                                        // axios를 thunk로 감싸면 비동기가 된다
-        const response = await instance.get('/articles/list',{
+        const response = await instance().get('/articles/list',{
             params: {page, size:10, limit: 10}
         })
         return response.data
@@ -16,7 +16,7 @@ export const findAllArticlesAPI = async (page: number) =>{     // axios = 동기
 
 export const findArticleByIdAPI = async (id: number) =>{ 
     try{                                                       
-        const response = await instance.get('/articles/detail',{
+        const response = await instance().get('/articles/detail',{
             params: {id}
         })
         return response.data
@@ -28,7 +28,7 @@ export const findArticleByIdAPI = async (id: number) =>{
 
 export const findModifyAPI = async (article: IArticle) => {
     try{
-        const response = (await instance.put('/articles/modify', article))
+        const response = (await instance().put('/articles/modify', article))
         return response.data
     }catch(error){
         console.log(error)
@@ -38,7 +38,7 @@ export const findModifyAPI = async (article: IArticle) => {
 }
 export const findDeleteByIdAPI = async (id: number) =>{    
     try{                                                        
-        const response = await instance.delete('/articles/delete',{
+        const response = await instance().delete('/articles/delete',{
             params: {id}
         })
         return response.data
@@ -50,7 +50,7 @@ export const findDeleteByIdAPI = async (id: number) =>{
 }
 export const findCountAPI = async () =>{    
     try{                                                        
-        const response = await instance.get('/articles/count',)
+        const response = await instance().get('/articles/count',)
         return response.data
     }catch(error){
         console.log(error)
@@ -60,7 +60,7 @@ export const findCountAPI = async () =>{
 }
 export const findMyListAPI = async (id:number) =>{    
     try{                                                        
-        const response = await instance.get('/articles/myList',{
+        const response = await instance().get('/articles/myList',{
             params: {id}
         })
         return response.data
@@ -71,7 +71,7 @@ export const findMyListAPI = async (id:number) =>{
 }
 export const saveArticleAPI = async (article:IArticle) =>{
     try{
-        const response = await instance.post('/articles/save',article)
+        const response = await instance().post('/articles/save',article)
         return response.data
     }catch(error){
         console.log(error)

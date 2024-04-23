@@ -5,7 +5,7 @@ import { PG } from "./components/common/enums/PG";
 import { useRouter } from "next/navigation";
 import { getAuth, getUserJson, getUserMessage } from "./components/user/service/user-slice";
 import { useDispatch, useSelector } from "react-redux";
-import { findLogin, findUserByPassword, findUserByUsername } from "./components/user/service/user-service";
+import { findLogin, findUserByUsername } from "./components/user/service/user-service";
 import { IUser } from "./components/user/model/user";
 import { parseCookies, destroyCookie, setCookie } from "nookies";
 import { jwtDecode } from "jwt-decode";
@@ -15,7 +15,6 @@ export default function Home() {
 
   const dispatch = useDispatch()
   const auth = useSelector(getAuth)
-  const resultId = useSelector(getUserMessage);
   const [idMsg, setIdMsg] = useState({ "message": '', "check": false });
   const [pwMsg, setPwMsg] = useState({ "message": '', "check": false });
 
@@ -121,14 +120,6 @@ export default function Home() {
   
    
   }
-
-
-  // useEffect(() => {
-  //   if (resultId === 'SUCCESS') {
-  //     dispatch(findUserByPassword(user));
-  //   }
-  // }, []);
-
 
   return (
     <div className="flex items-center justify-center h-[80vh] w-full px-5 sm:px-0">

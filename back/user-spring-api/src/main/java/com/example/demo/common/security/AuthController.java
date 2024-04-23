@@ -20,8 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthController{
     private final UserServiceImpl service;
+
     @PostMapping(path = "/login")
     public ResponseEntity<Messenger> login(@RequestBody UserDto param) {
         return ResponseEntity.ok(service.login(param));
+    }
+
+    @GetMapping("/exists-username")
+    public ResponseEntity<Messenger> existsUsername(@RequestParam("username") String username){
+        log.info("입력받은 정보 : {}",username);
+        return ResponseEntity.ok(service.existsUsername(username));
     }
 }

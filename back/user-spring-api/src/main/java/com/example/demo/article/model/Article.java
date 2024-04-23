@@ -11,9 +11,10 @@ import lombok.*;
 @ToString(exclude = {"id"})
 @Entity(name = "articles")
 @AllArgsConstructor
+@Builder
 public class Article extends BaseEntity {
     @Id
-    @Column(name = "article_id", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;

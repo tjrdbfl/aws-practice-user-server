@@ -4,7 +4,7 @@ import com.example.demo.common.components.Messenger;
 import com.example.demo.user.model.User;
 import com.example.demo.user.model.UserDto;
 import com.example.demo.user.repository.UserRepository;
-import com.example.demo.common.components.PageRequestVo;
+import com.example.demo.common.components.pagination.PageRequestVo;
 
 import com.example.demo.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,10 +44,6 @@ public class UserController {
     }
     // -----------------------------------Query ---------------------------------------
 
-    @PostMapping(path = "/login")
-    public ResponseEntity<Messenger> login(@RequestBody UserDto param) {
-        return ResponseEntity.ok(service.login(param));
-    }
     @GetMapping("/list")
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("입력받은 정보 : {}");
@@ -89,4 +85,12 @@ public class UserController {
         service.findUsersByJob(null);
         return ResponseEntity.ok(new Messenger());
     }
+
+//    @GetMapping("/logout")
+//    public ResponseEntity<Messenger> logout(@RequestHeader("Authorization") String accessToken){
+//        log.info("logout request : {}", accessToken);
+//        return ResponseEntity.ok(service.logout(accessToken);
+//    }
+
+
 }

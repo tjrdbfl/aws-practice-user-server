@@ -3,7 +3,7 @@ import { IUser } from "../model/user"
 
 export const findAllUsersAPI = async (page: number) => {
     try{
-        const response = await instance.get('/users/list',{
+        const response = await instance().get('/users/list',{
             params: {page, size:10, limit: 10}
         })
         return response.data
@@ -14,7 +14,7 @@ export const findAllUsersAPI = async (page: number) => {
 }
 export const findUserByIdAPI = async (id: number) => {
     try{
-        const response = await instance.get('/users/detail',{
+        const response = await instance().get('/users/detail',{
             params: {id}
         })
         return response.data
@@ -25,7 +25,7 @@ export const findUserByIdAPI = async (id: number) => {
 }
 export const findModifyAPI = async (user: IUser) => {
     try{
-        const response = (await instance.put('/users/modify', user))
+        const response = (await instance().put('/users/modify', user))
             
         return response.data
     }catch(error){
@@ -35,7 +35,7 @@ export const findModifyAPI = async (user: IUser) => {
 }
 export const findDeleteByIdAPI = async (id: number) => {
     try{
-        const response = await instance.delete('/users/delete',{
+        const response = await instance().delete('/users/delete',{
             params: {id}
         })
         return response.data
@@ -46,7 +46,7 @@ export const findDeleteByIdAPI = async (id: number) => {
 }
 export const findCountAPI = async () => {
     try{
-        const response = await instance.get('/users/count',)
+        const response = await instance().get('/users/count',)
         return response.data
     }catch(error){
         console.log(error)
@@ -55,7 +55,7 @@ export const findCountAPI = async () => {
 }
 export const findLoginAPI = async (user : IUser) => {
     try{
-        const response = await instance.post('/users/login',user)
+        const response = await instance().post('/auth/login',user)    //토큰 발급 되기 전 : auth - interceptor 통과 
         return response.data
     }catch(error){
         console.log(error)
@@ -64,7 +64,7 @@ export const findLoginAPI = async (user : IUser) => {
 }
 export const findLogoutAPI = async (user : IUser) => {
     try{
-        const response = await instance.post('/users/logout',user)
+        const response = await instance().post('/users/logout',user)
         return response.data
     }catch(error){
         console.log(error)
@@ -74,18 +74,9 @@ export const findLogoutAPI = async (user : IUser) => {
 
 export const findUserByUsernameAPI = async (username : string) => {
     try{
-        const response = await instance.get('/users/exists-username',
+        const response = await instance().get('/auth/exists-username',        //토큰 발급 되기 전 : auth - interceptor 통과 
             {params:{username}}
-        )
-        return response.data.message
-    }catch(error){
-        console.log(error)
-        return error
-    }
-}
-export const findUserByPasswordAPI = async (user : IUser) => {
-    try{
-        const response = await instance.post('/users/exists-password',user)
+        ) 
         return response.data.message
     }catch(error){
         console.log(error)

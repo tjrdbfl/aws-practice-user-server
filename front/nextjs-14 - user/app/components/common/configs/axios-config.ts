@@ -1,4 +1,6 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+import { error } from 'console'
+import { response } from 'express'
 import { parseCookies } from 'nookies'
 import { env } from 'process'
 
@@ -13,32 +15,31 @@ import { env } from 'process'
 //     }
 // }
 
+export default function instance(){
+    const instance = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL}) 
+    setInterceptor(instance)
+    return instance;
+}
 
-const instance = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL}) 
-
-instance.interceptors.request.use(
-    (config)=>{
-        const accessToken=parseCookies().accessToken;
-        console.log('Axios Interceptor에서 쿠키에서 토큰 추출');
-        config.headers['Content-Type']="application/json";
-        config.headers['Authorization']=`Bearer ${accessToken}`;
-        
-        return config
-    },
-    (error)=>{
-        console.log('Axios Interceptor '+ error);
-        return Promise.reject(error)    //결과 에러 
-    }
-)
-
-instance.interceptors.response.use(
-    (response)=>{
-        if(response.status===404){
-            console.log('Axios Interceptor에서 발생한 에러로 토큰이 없어서 404 페이지로 넘어감')
-
+export const setInterceptor = (inputInstance:AxiosInstance) => {
+    inputInstance.interceptors.request.use(
+        (config)=>{
+            config.headers["Content-Type"]="application/json";
+            config.headers["Authorization"]=`Bearer ${parseCookies().accessToken}`
+            return config;
         }
-        return response;
+        ,
+    (error)=>{
+        console.log('Axios Interceptor error: '+error)
+        return Promise.reject(error)
     }
-)
-
-export default instance;
+    )
+    inputInstance.interceptors.response.use(
+        (response)=>{
+            if(response.status===404)
+                console.log('Axios Interceptor catches 404')
+            return response
+        }
+    )
+    return inputInstance
+}

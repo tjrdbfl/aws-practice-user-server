@@ -15,7 +15,10 @@ function ResponsiveAppBar() {
   const dispatch=useDispatch();
   const router=useRouter();
 
+  router.refresh
+  
   useEffect(()=>{
+    
     console.log('header'+parseCookies().accessToken)
     if(parseCookies().accessToken !==''){
       console.log('showProfile:true');

@@ -1,17 +1,14 @@
 package com.example.demo.article;
 
 import com.example.demo.article.model.ArticleDto;
-import com.example.demo.article.service.ArticleService;
 import com.example.demo.article.service.ArticleServiceImpl;
 import com.example.demo.common.components.Messenger;
-import com.example.demo.common.components.PageRequestVo;
-import com.example.demo.user.model.UserDto;
+import com.example.demo.common.components.pagination.PageRequestVo;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +29,10 @@ public class ArticleController {
     @PostMapping( "/save")
     public ResponseEntity<Messenger> save(@RequestBody ArticleDto dto) {
         log.info("입력받은 정보 : {}", dto );
+        log.info(dto.getTitle());
+        log.info(dto.getContent());
+        log.info(String.valueOf(dto.getBoardId()));
         return ResponseEntity.ok(service.save(dto));
-
     }
     @PutMapping("/modify")
     public ResponseEntity<Messenger> modify(@RequestBody ArticleDto dto) {

@@ -1,18 +1,25 @@
 package com.example.demo.user.service;
 
-import com.example.demo.common.components.JwtProvider;
+import com.example.demo.common.components.security.JwtProvider;
 import com.example.demo.common.components.Messenger;
 import com.example.demo.user.model.User;
 import com.example.demo.user.model.UserDto;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor //흐름 제어
+@Slf4j
+//Impl은 자신의 로직만 실행
+// => Ioc : 프로그램의 제어 흐름을 외부에 의해 관리 당하는 것
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -82,14 +89,54 @@ public class UserServiceImpl implements UserService {
         return repository.findByUsername(username);
     }
 
+    //SRP 에 따라 아이디 존재 여부를 프론트에서 먼저 판단하고, 넣어옴 (시큐리티 )
+    @Transactional
     @Override
-    public Messenger login(UserDto dto) {
-        boolean flag = repository.findByUsername(dto.getUsername()).get().getPassword().equals(dto.getPassword());
+    public Messenger login(UserDto param) {
+        Optional<User> user = repository.findByUsername(param.getUsername());
 
-        return Messenger.builder()
-                .message(flag ? "SUCCESS" : "FAILURE")
-                .token(flag ? jwtProvider.createToken(dto) : "None")
-                .build();
+        if (user.isEmpty()) {
+            return Messenger.builder()
+                    .status(404)
+                    .message("FAILURE")
+                    .accessToken("None")
+                    .build();
+        }
+        else{
+            String accessToken = jwtProvider.createToken(user.get());
+            repository.modifyTokenById(accessToken, user.get().getId());
+
+            User users = user.get();
+
+            jwtProvider.printPayload(accessToken);
+
+            return users.getPassword().equals(param.getPassword()) ?
+                    Messenger.builder()
+                            .status(200)
+                            .accessToken(accessToken)
+                            .message("SUCCESS")
+                            .build() :
+                    Messenger.builder()
+                            .status(404)
+                            .message("ADMIN")
+                            .build();
+        }
+
+        }
+
+
+    @Override
+    public Messenger existsUsername(String username) {
+        return repository.existsByUsername(username)>0 ?
+                Messenger.builder()
+                        .status(200)
+                        .message("SUCCESS")
+                        .build() :
+                Messenger.builder()
+                        .status(404)
+                        .message("FAILURE")
+                        .build();
     }
+
 
 }

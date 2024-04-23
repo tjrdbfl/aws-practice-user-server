@@ -1,4 +1,4 @@
-package com.example.demo.common.components;
+package com.example.demo.common.components.pagination;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
