@@ -1,3 +1,4 @@
+
 'use client'
 import { useRouter } from 'next/navigation';
 import { Box } from '@mui/material';
@@ -18,7 +19,6 @@ function ResponsiveAppBar() {
   router.refresh
   
   useEffect(()=>{
-    
     console.log('header'+parseCookies().accessToken)
     if(parseCookies().accessToken !==''){
       console.log('showProfile:true');

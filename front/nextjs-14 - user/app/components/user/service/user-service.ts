@@ -29,7 +29,7 @@ export const findLogin: any = createAsyncThunk(
 )
 export const findLogout: any = createAsyncThunk( 
     'users/findLogout',                      
-    async (user:IUser) => await findLogoutAPI(user) 
+    async () => await findLogoutAPI() 
 )
 export const findUserByUsername: any = createAsyncThunk( 
     'users/findUserByUsername',                      

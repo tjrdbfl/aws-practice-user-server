@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final JwtProvider jwtProvider;
     @Override
     public Messenger save(UserDto t) {
-        User ent=repository.save(dtoToEntity(t));
+        var ent=repository.save(dtoToEntity(t));
         return Messenger.builder()
                 .message((ent instanceof User)?"SUCCESS":"FAILURE")
                 .build();
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Messenger modify(UserDto t) {
-        User user = repository.findById(t.getId()).get();
+        var user = repository.findById(t.getId()).get();
         user.setPassword(t.getPassword());
         user.setPhone(t.getPhone());
         user.setJob(t.getJob());
@@ -89,11 +89,27 @@ public class UserServiceImpl implements UserService {
         return repository.findByUsername(username);
     }
 
+    @Override
+    public Boolean logout(String accessToken) {
+        String splitToken = accessToken.substring(7);
+
+        Long id = jwtProvider.getPayload(splitToken).get("id", Long.class);
+
+        User user = repository.findById(id).orElseThrow();
+
+        user.setToken(null);
+
+        repository.save(user);
+
+        return true;
+
+    }
+
     //SRP 에 따라 아이디 존재 여부를 프론트에서 먼저 판단하고, 넣어옴 (시큐리티 )
     @Transactional
     @Override
     public Messenger login(UserDto param) {
-        Optional<User> user = repository.findByUsername(param.getUsername());
+        var user = repository.findByUsername(param.getUsername());
 
         if (user.isEmpty()) {
             return Messenger.builder()
@@ -103,10 +119,10 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
         else{
-            String accessToken = jwtProvider.createToken(user.get());
+            var accessToken = jwtProvider.createToken(user.get());
             repository.modifyTokenById(accessToken, user.get().getId());
 
-            User users = user.get();
+            var users = user.get();
 
             jwtProvider.printPayload(accessToken);
 

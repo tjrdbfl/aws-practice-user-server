@@ -24,9 +24,9 @@ public class ArticleServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        testArticle = Article.of("테스트 제목", "테스트 내용");
-        this.service = new ArticleServiceImpl(articleRepository);
-        articleRepository.save(testArticle);
+//        testArticle = Article.of("테스트 제목", "테스트 내용");
+//        this.service = new ArticleServiceImpl(articleRepository);
+//        articleRepository.save(testArticle);
     }
 
     @BeforeEach

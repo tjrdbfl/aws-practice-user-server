@@ -46,5 +46,6 @@ public interface UserService extends CommandService<UserDto>, QueryService<UserD
                 .build();
     }
 
+    Boolean logout(String accessToken);
 }
 

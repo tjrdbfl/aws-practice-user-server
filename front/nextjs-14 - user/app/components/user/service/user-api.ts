@@ -62,9 +62,9 @@ export const findLoginAPI = async (user : IUser) => {
         return error
     }
 }
-export const findLogoutAPI = async (user : IUser) => {
+export const findLogoutAPI = async () => {
     try{
-        const response = await instance().post('/users/logout',user)
+        const response = await instance().get('/users/logout')
         return response.data
     }catch(error){
         console.log(error)

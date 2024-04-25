@@ -144,15 +144,6 @@ export default function Home() {
               required
             />
           </div>
-          {/* {length.idLength ?
-            (resultId === 'SUCCESS' ? (
-              <p className="text-blue-500 font-weight-500 mt-2">{idMsg.message}</p>
-            ) : resultId === 'FAILURE' ? (
-              <p className="text-red-500 font-weight-500 mt-2">{idMsg.message}</p>
-            ) : 
-              !idMsg?.check ? (<p className="text-red-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>)
-                : <p className="text-blue-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>
-            ) : null} */}
           {length.idLength ?
             (
               !idMsg?.check ? (<p className="text-red-500 font-weight-500 font-size-10 mt-2">{idMsg.message}</p>)

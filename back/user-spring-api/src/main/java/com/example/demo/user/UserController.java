@@ -47,7 +47,6 @@ public class UserController {
     @GetMapping("/list")
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("입력받은 정보 : {}");
-        System.out.println(service.findAll());
         return ResponseEntity.ok(service.findAll());
     }
     @GetMapping("/detail")
@@ -86,11 +85,10 @@ public class UserController {
         return ResponseEntity.ok(new Messenger());
     }
 
-//    @GetMapping("/logout")
-//    public ResponseEntity<Messenger> logout(@RequestHeader("Authorization") String accessToken){
-//        log.info("logout request : {}", accessToken);
-//        return ResponseEntity.ok(service.logout(accessToken);
-//    }
+    @GetMapping("/logout")
+    public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String accessToken) {
 
-
+        log.info("logout request : {}", accessToken);
+        return ResponseEntity.ok(service.logout(accessToken));
+    }
 }

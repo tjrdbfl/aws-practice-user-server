@@ -17,6 +17,7 @@ public interface ArticleService extends CommandService<ArticleDto>, QueryService
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .board(boardRepository.findById(dto.getBoardId()).orElse(null))
+//                .writer(d)
                 .build();
     }
     default ArticleDto entityToDto(Article ent) {
@@ -25,6 +26,8 @@ public interface ArticleService extends CommandService<ArticleDto>, QueryService
                 .id(ent.getId())
                 .title(ent.getTitle())
                 .content(ent.getContent())
+//                .writerId(ent.getWriter().getId())
+//                .boardId(ent.getBoard().getId())
                 .modDate(String.valueOf(ent.getModDate()))
                 .regDate(String.valueOf(ent.getRegDate()))
                 .build();
