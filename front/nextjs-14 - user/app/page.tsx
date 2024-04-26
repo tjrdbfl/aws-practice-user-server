@@ -76,7 +76,7 @@ export default function Home() {
             setCookie({}, 'accessToken', res.payload.accessToken, { httpOnly: false, path: '/' })
             console.log('서버에서 넘어온 메세지' + parseCookies().message)
             console.log('서버에서 넘어온 토큰 2'+parseCookies().accessToken)
-            console.log(jwtDecode<any>(parseCookies().accessToken))
+            console.log(jwtDecode<any>(parseCookies().accessToken).id)
             setIdMsg({...idMsg,message:"존재하는 ID",check:true})
             setPwMsg({...pwMsg,message:"존재하는 PW",check:true})
             router.push(`${PG.BOARD}/list`)

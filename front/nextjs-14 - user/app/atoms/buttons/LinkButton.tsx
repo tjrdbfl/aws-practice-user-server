@@ -3,7 +3,7 @@ import { PG } from "@/app/components/common/enums/PG";
 import { IUser } from "@/app/components/user/model/user";
 import { findUserInfo } from "@/app/components/user/service/user-service";
 import { getUserJson } from "@/app/components/user/service/user-slice";
-import { jwtDecode } from "jwt-decode";
+import { JwtHeader, JwtPayload, jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { parseCookies } from "nookies";
 import { useEffect } from "react";
@@ -29,10 +29,12 @@ export default function LinkButton({id,title,path}:ILinkButton){
 );
 }
 
+const token:string|null=parseCookies()?.accessToken;
+
 export const linkButtonTitles=[
     {id:1,title:'회원가입',path:`${PG.USER}/join`},
     {id:2,title:'로그인',path:`/`},
-    {id:3,title:'마이페이지',path:`${PG.USER}/detail/${jwtDecode<any>(parseCookies().accessToken).id}`},
+    {id:3,title:'마이페이지',path:`${PG.USER}/detail/${token? jwtDecode<any>(token).id:0}`},
     {id:4,title:'게시판목록',path:`${PG.BOARD}/list`},
 ]
 

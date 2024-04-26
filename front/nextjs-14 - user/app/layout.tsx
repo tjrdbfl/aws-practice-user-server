@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+ 
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -34,7 +34,7 @@ export default function RootLayout({
           <ReduxProvider>
             {/* 조건이 참일 때 뒤에 요소 렌더링 */}
             {parseCookies().message === "SUCCESS" && <Header />}
-
+           
             {children}
           </ReduxProvider>
         </div>

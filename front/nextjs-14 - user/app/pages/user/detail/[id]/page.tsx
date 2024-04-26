@@ -56,7 +56,8 @@ export default function userDetailPage(props: any) {
   const handleWithDrawal = () => {
     dispatch(findDeleteById(props.params.id)).
       then((res: any) => {
-        if (res.payload.message === 'SUCCESS') {
+        console.log(res.payload)
+        if (res.payload === 'SUCCESS') {
           alert('회원 탈퇴 완료');
           dispatch(findLogout())
             .then((res: any) => {

@@ -15,6 +15,7 @@ export default function BoardCards() {
     const allBoards = useSelector(getBoardArray)
     const router=useRouter();
 
+    
     useEffect(() => {
         dispatch(findAllBoards(1))
     }, [dispatch])

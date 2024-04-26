@@ -12,24 +12,26 @@ import Link from 'next/link';
 import { jwtDecode } from 'jwt-decode';
 import { getUserJson } from '../../user/service/user-slice';
 
-
 function ResponsiveAppBar() {
   const [showProfile,setShowProfile]=useState(false);
   const dispatch=useDispatch();
   const router=useRouter();
   const userInfo=useSelector(getUserJson);
-
-  router.refresh
+  let token:string|null=null;
   
   useEffect(()=>{
-    console.log('header'+parseCookies().accessToken)
-    if(parseCookies().accessToken !==''){
+    console.log('현재 쿠키: '+parseCookies().accessToken);
+    console.log('현재 토큰: '+token);
+    if(parseCookies().accessToken){
       console.log('showProfile:true');
       setShowProfile(true)
-      dispatch(findUserById(jwtDecode<any>(parseCookies().accessToken).id))
+      token=parseCookies().accessToken;
+      token? dispatch(findUserById(jwtDecode<any>(token).id )): router.push('/');
+      router.refresh();
     }else{
       console.log('showProfile:false');
       setShowProfile(false);
+      router.refresh();
     }
   },[parseCookies().accessToken])
 
@@ -38,12 +40,16 @@ function ResponsiveAppBar() {
     dispatch(findLogout())
     .then((res:any)=>{
       destroyCookie(null,'accessToken')
-      console.log('destroy 쿠기 후: showProfile:false');
+      console.log('destroy 쿠기 후: '+parseCookies().accessToken);
       setShowProfile(false)
+      token=null;
       router.push('/');
     }) 
     .catch((err:any)=>{
+      setShowProfile(true)
       console.log('로그아웃 실행에서 에러 발생'+err);
+    }).finally(()=>{
+      router.refresh();
     })
   }
 
@@ -56,7 +62,7 @@ function ResponsiveAppBar() {
   <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
       {!showProfile && <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
         <span className="sr-only">Open user menu</span>
-        <img className="w-8 h-8 rounded-full" src="C:\Users\user\kubernetes-demo\soccer-server\front\nextjs-14 - soccer\public\img\user\icons8-user-default-32.png" alt="user photo" />
+        <img className="w-8 h-8 rounded-full" src="http://localhost:3000/img/user/icons8-user-default-32.png" alt="user photo" />
       </button>}
       {showProfile &&
           <div className="flex px-4 py-3 float-end">

@@ -38,7 +38,7 @@ export const findDeleteByIdAPI = async (id: number) => {
         const response = await instance().delete('/users/delete',{
             params: {id}
         })
-        return response.data
+        return response.data.message
     }catch(error){
         console.log(error)
         return error
