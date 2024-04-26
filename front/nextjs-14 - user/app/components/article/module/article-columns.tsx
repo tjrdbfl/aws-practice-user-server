@@ -1,8 +1,10 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { ArticleColumn } from "../model/article-column";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { PG } from "../../common/enums/PG";
+import { useDispatch } from "react-redux";
+import { findDeleteById } from "../service/article-service";
 
 interface CellType{
     row : ArticleColumn

@@ -3,6 +3,8 @@ import com.example.demo.article.model.Article;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class UserDto {
     private String phone;
     private String job;
 
-    private String regDate;
-    private String modDate;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
     private List<Article> articles ;
 
     private String token;

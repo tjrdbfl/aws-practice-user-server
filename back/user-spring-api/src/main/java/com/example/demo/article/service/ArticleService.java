@@ -11,13 +11,12 @@ import java.util.List;
 
 public interface ArticleService extends CommandService<ArticleDto>, QueryService<ArticleDto> {
     List<ArticleDto> myList(Long id);
-    default Article dtoToEntity(ArticleDto dto, BoardRepository boardRepository) {
+    default Article dtoToEntity(ArticleDto dto) {
 
         return Article.builder()
+                .id(dto.getId())
                 .title(dto.getTitle())
-                .content(dto.getContent())
-                .board(boardRepository.findById(dto.getBoardId()).orElse(null))
-//                .writer(d)
+                .content(dto.getContent())//                .writer(d)
                 .build();
     }
     default ArticleDto entityToDto(Article ent) {
@@ -28,8 +27,8 @@ public interface ArticleService extends CommandService<ArticleDto>, QueryService
                 .content(ent.getContent())
 //                .writerId(ent.getWriter().getId())
 //                .boardId(ent.getBoard().getId())
-                .modDate(String.valueOf(ent.getModDate()))
-                .regDate(String.valueOf(ent.getRegDate()))
+                .modDate(ent.getModDate())
+                .regDate(ent.getRegDate())
                 .build();
     }
 }

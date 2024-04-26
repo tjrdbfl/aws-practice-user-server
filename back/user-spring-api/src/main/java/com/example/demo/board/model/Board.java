@@ -23,6 +23,8 @@ public class Board extends BaseEntity {
     private String title;
     @Column(name = "description")
     private String description;
+    @Column(name = "content")
+    private String content;
 
 
     @OneToMany(mappedBy = "board" , fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

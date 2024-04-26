@@ -45,12 +45,12 @@ public class ArticleController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<ArticleDto> findById(@RequestParam Long id) {
+    public ResponseEntity<ArticleDto> findById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
         return ResponseEntity.ok(service.findById(id).orElseGet(ArticleDto::new));
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<Messenger> deleteById(@RequestParam Long id) {
+    public ResponseEntity<Messenger> deleteById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
         service.deleteById(id);
         return ResponseEntity.ok(service.deleteById(id));
@@ -70,6 +70,7 @@ public class ArticleController {
     //id를 특정지을 수 없을 때는 @RequestParam("id") 로 명시
     @GetMapping("/myList")
     public ResponseEntity<List<ArticleDto>> myList(@RequestParam("id") Long id){
+        log.info("myList: {}",id);
         return ResponseEntity.ok(service.myList(id));
     }
 }

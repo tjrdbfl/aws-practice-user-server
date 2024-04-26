@@ -21,8 +21,9 @@ select * from users;
 # insert into users (id, username, password, name, phone, job, mod_date, reg_date) values (19, 'ysevini', 'oX2=n(I}', 'Yevette Sevin', '897-942-8938', 'Accounting Assistant IV', '2023-12-02 05:19:43', '2024-01-06 04:44:20');
 # insert into users (id, username, password, name, phone, job, mod_date, reg_date) values (20, 'bhoppnerj', 'cC7!ex0`WSUn', 'Babbette Hoppner', '954-519-5620', 'VP Sales', '2023-05-05 00:10:49', '2024-02-28 04:32:04');
 # --
-# insert into boards (id, title, description, mod_date, reg_date) values (1, 'REVIEW','Retype','2023-05-05 00:10:49', '2024-05-05 00:10:49');
-# insert into boards (id, title, description, mod_date, reg_date) values (2, 'QNA','QNAtype','2023-09-30 08:20:52', '2023-12-05 00:12:51');
+# insert into boards (id, title, description,content, mod_date, reg_date) values (1, 'REVIEW','Retype','write review','2023-05-05 00:10:49', '2024-05-05 00:10:49');
+# insert into boards (id, title, description,content, mod_date, reg_date) values (2, 'QNA','QNAtype','write qna','2023-09-30 08:20:52', '2023-12-05 00:12:51');
+# insert into boards (id, title, description,content, mod_date, reg_date) values (3, 'FREE','FREEtype','write qna','2023-09-30 08:20:52', '2023-12-05 00:12:51');
 # --
 # insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (1, 'Man in the Gray Flannel Suit, The', 'Apt 530', 6, 1, '2023-05-05 00:10:49', '2024-02-28 04:32:04');
 # insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (2, 'Advantageous', 'Apt 1031', 17, 2, '2023-04-14 12:07:46', '2023-09-30 08:20:52');
@@ -123,4 +124,5 @@ select * from users;
 # insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (97, 'Chelsea Girls', 'Suite 7', 19, 2, '2023-07-21 17:46:32', '2024-02-14 01:24:21');
 # insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (98, 'Sommer der Gaukler, Der', '2nd Floor', 2, 1, '2023-06-09 03:35:26', '2023-08-02 13:07:47');
 # insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (99, 'Tyler Perry''s Diary of a Mad Black Woman', '9th Floor', 1, 1, '2023-10-29 18:53:19', '2023-06-27 03:06:59');
-#  insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (100, 'Babysitter Wanted', 'Apt 1493', 20, 1, '2023-06-23 10:30:50', '2023-04-28 07:56:14');
+# insert into articles (id, title, content, writer_id, board_id, mod_date, reg_date) values (100, 'Babysitter Wanted', 'Apt 1493', 20, 1, '2023-06-23 10:30:50', '2023-04-28 07:56:14');
+#

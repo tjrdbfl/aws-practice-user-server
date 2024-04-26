@@ -47,6 +47,7 @@ public class JwtProvider {
                 .claim("id", user.getId())
                 .compact();
 
+
         log.info("로그인 성공으로 발급된 토큰 : "+token);
         return token;
     }

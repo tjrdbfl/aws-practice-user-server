@@ -16,7 +16,7 @@
 /* external css to add in tailwind's Global css
 no-scrollbar(className) */
 @layer utilities {
-    @variants responsive {
+    .responsive {
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -25,4 +25,22 @@ no-scrollbar(className) */
         scrollbar-width: none;
       }
     }
+}
+
+.username:hover + .hover-message {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hover-message {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: calc(100% + 1rem); /* Adjust as needed */
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f0f0f0; /* Adjust background color */
+  border: 1px solid #ccc; /* Adjust border style */
 }

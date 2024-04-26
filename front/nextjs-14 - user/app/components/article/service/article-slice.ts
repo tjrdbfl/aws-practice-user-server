@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { findAllArticles, findArticleById, findCount, findDeleteById, findModify, findMyList, saveArticle } from "./article-service";
+import { findAllArticles, findArticleById, findCount, findDeleteById, findArticleModify, findMyList, saveArticle } from "./article-service";
 import { IArticle } from "../model/article";
 
 const articleThunks = [findAllArticles]
@@ -33,9 +33,9 @@ export const articleSlice = createSlice({   // 슬라이스의 이름 = articles
     name: "articles",
     initialState,
     reducers: {
-        titleHandler: (state:any, {payload}) => {state.json.title = payload},
-        contentHandler: (state:any, {payload}) => {state.json.content= payload},
-        boardIdHandler: (state:any, {payload}) => {state.json.boardId= payload}
+        // titleHandler: (state:any, {payload}) => {state.json.title = payload},
+        // contentHandler: (state:any, {payload}) => {state.json.content= payload},
+        // boardIdHandler: (state:any, {payload}) => {state.json.boardId= payload}
     }, // reducers 내부 
     extraReducers:builder =>{ // extraReducers 외부
         const {pending, rejected} = status;
@@ -45,7 +45,7 @@ export const articleSlice = createSlice({   // 슬라이스의 이름 = articles
         .addCase(findArticleById.fulfilled, (state:any, {payload}:any)=>{state.json = payload})   
         .addCase(findDeleteById.fulfilled, (state:any, {payload}:any)=>{state.message = payload}) 
         .addCase(findCount.fulfilled, (state:any, {payload}:any)=>{state.count = payload})
-        .addCase(findModify.fulfilled, (state:any, {payload}:any) => {state.array = payload}) 
+        .addCase(findArticleModify.fulfilled, (state:any, {payload}:any) => {state.message = payload}) 
         .addCase(findMyList.fulfilled, (state:any, {payload}:any) => {state.array = payload}) 
         .addCase(saveArticle.fulfilled, (state:any, {payload}:any) => {state.message = payload}) 
     }
@@ -57,6 +57,6 @@ export const getArticleJson = (state: any) => (state.article.json)
 export const getArticleCount = (state: any) => (state.article.count) 
 export const getArticleMessage = (state: any) => (state.article.message) 
  
-export const {titleHandler, contentHandler,boardIdHandler} = articleSlice.actions
+// export const {titleHandler, contentHandler,boardIdHandler} = articleSlice.actions
 
 export default articleSlice.reducer; // 여러개의 리듀서를 합치는 문법 (마지막은 리턴값은 단수형)

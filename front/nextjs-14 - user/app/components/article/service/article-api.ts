@@ -26,10 +26,10 @@ export const findArticleByIdAPI = async (id: number) =>{
     }
 }
 
-export const findModifyAPI = async (article: IArticle) => {
+export const findArticleModifyAPI = async (article: IArticle) => {
     try{
         const response = (await instance().put('/articles/modify', article))
-        return response.data
+        return response.data.message
     }catch(error){
         console.log(error)
         return error

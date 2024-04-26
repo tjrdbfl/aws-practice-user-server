@@ -23,11 +23,11 @@ export const findUserByIdAPI = async (id: number) => {
         return error
     }
 }
-export const findModifyAPI = async (user: IUser) => {
+export const findUserModifyAPI = async (user: IUser) => {
     try{
         const response = (await instance().put('/users/modify', user))
             
-        return response.data
+        return response.data.message
     }catch(error){
         console.log(error)
         return error
@@ -65,6 +65,15 @@ export const findLoginAPI = async (user : IUser) => {
 export const findLogoutAPI = async () => {
     try{
         const response = await instance().get('/users/logout')
+        return response.data
+    }catch(error){
+        console.log(error)
+        return error
+    }
+}
+export const findUserInfoAPI = async () => {
+    try{
+        const response = await instance().get('/users/search')
         return response.data
     }catch(error){
         console.log(error)

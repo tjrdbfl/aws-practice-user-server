@@ -17,7 +17,7 @@ public interface UserService extends CommandService<UserDto>, QueryService<UserD
     Messenger existsUsername(String username);
     List<UserDto> findUsersByJob(String job);
     List<UserDto> findUsersByName(String name);
-    Optional<User> findUserByUsername(String username);
+    Optional<UserDto> findUserInfo(String username);
 
 
 
@@ -41,11 +41,13 @@ public interface UserService extends CommandService<UserDto>, QueryService<UserD
                 .name(ent.getName())
                 .phone(ent.getPhone())
                 .job(ent.getJob())
-                .modDate(String.valueOf(ent.getModDate()))
-                .regDate(String.valueOf(ent.getRegDate()))
+                .modDate(ent.getModDate())
+                .regDate(ent.getRegDate())
                 .build();
     }
 
     Boolean logout(String accessToken);
+
+    Optional<User> findUserByName(String name);
 }
 

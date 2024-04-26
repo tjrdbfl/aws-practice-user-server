@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     public void modifyTokenById(@Param("token") String token, @Param("id") Long id);
 
     Optional<User> findByToken(String token);
+
+
 }

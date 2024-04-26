@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { findAllUsers, findCount, findDeleteById, findLogin, findLogout, findModify, findUserById, findUserByUsername } from "./user-service";
+import { findAllUsers, findCount, findDeleteById, findLogin, findLogout, findUserById, findUserByUsername, findUserInfo, findUserModify } from "./user-service";
 import { IUser } from "../model/user";
 
 
@@ -39,10 +39,10 @@ export const userSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        passwordHandler: (state:any, {payload}) => {state.json.password = payload},
-        phoneHandler: (state:any, {payload}) => {state.json.phone = payload},
-        jobHandler: (state:any, {payload}) => {state.json.job = payload},
-        // setUsername : (state:any, {payload}) => {state.json.username = payload},
+        // passwordHandler: (state:any, {payload}) => {state.json.password = payload},
+        // phoneHandler: (state:any, {payload}) => {state.json.phone = payload},
+        // jobHandler: (state:any, {payload}) => {state.json.job = payload},
+        // // setUsername : (state:any, {payload}) => {state.json.username = payload},
         // setPassword : (state:any, {payload}) => {state.json.password = payload}
        
     },
@@ -52,12 +52,13 @@ export const userSlice = createSlice({
         builder
         .addCase(findAllUsers.fulfilled, (state:any, {payload}:any) => {state.array = payload})
         .addCase(findUserById.fulfilled, (state:any, {payload}:any) => {state.json = payload})
-        .addCase(findModify.fulfilled, (state:any, {payload}:any) => {state.array = payload})
+        .addCase(findUserModify.fulfilled, (state:any, {payload}:any) => {state.message = payload})
         .addCase(findDeleteById.fulfilled, (state:any, {payload}:any) => {state.message = payload})
         .addCase(findCount.fulfilled, (state:any, {payload}:any) => {state.count = payload})
         .addCase(findUserByUsername.fulfilled, (state:any, {payload}:any) => {state.message = payload})
         .addCase(findLogin.fulfilled, (state:any, {payload}:any) => {state.auth = payload})
         .addCase(findLogout.fulfilled, (state:any, {payload}:any) => {state.auth = payload})
+        .addCase(findUserInfo.fulfilled, (state:any, {payload}:any) => {state.json = payload})
  }
 })
 
@@ -67,6 +68,6 @@ export const getUserCount = (state: any) => (state.user.count)
 export const getUserMessage = (state: any) => (state.user.message)
 export const getAuth = (state: any) => (state.user.auth)
 
-export const {passwordHandler, phoneHandler, jobHandler } = userSlice.actions
+// export const {passwordHandler, phoneHandler, jobHandler } = userSlice.actions
 
 export default userSlice.reducer;

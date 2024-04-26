@@ -49,11 +49,19 @@ public class UserController {
         log.info("입력받은 정보 : {}");
         return ResponseEntity.ok(service.findAll());
     }
+
     @GetMapping("/detail")
-    public ResponseEntity<UserDto> findById(@RequestParam Long id) {
+    public ResponseEntity<UserDto> findById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
         return ResponseEntity.ok(service.findById(id).orElseGet(UserDto::new));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<UserDto>> findUserInfo(@RequestHeader("Authorization") String accessToken) {
+        log.info("입력받은 정보 : {}", accessToken );
+        return ResponseEntity.ok(service.findUserInfo(accessToken));
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<Messenger> deleteById(@RequestParam Long id) {
         log.info("입력받은 정보 : {}", id );
@@ -74,11 +82,12 @@ public class UserController {
 
 
 
-    @PostMapping("/search")
+    @PostMapping("/search-name")
     public ResponseEntity<Optional<User>> findUsersByName(@RequestBody UserDto param) {
         //log.info("입력받은 정보 : {}", name );
-        return ResponseEntity.ok(service.findUserByUsername(param.getName()));
+        return ResponseEntity.ok(service.findUserByName(param.getName()));
     }
+
     @GetMapping("/findUserByJob")
     public ResponseEntity<Messenger> findUserByJob(PageRequestVo vo) {
         service.findUsersByJob(null);

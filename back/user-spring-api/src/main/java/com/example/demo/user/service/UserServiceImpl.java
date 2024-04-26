@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,20 +35,26 @@ public class UserServiceImpl implements UserService {
     public Messenger deleteById(Long id) {
         repository.deleteById(id);
         return Messenger.builder()
-                .message(repository.findById(id).isEmpty() ? "SUCCESS":"FAILURE")
+                .message(repository.existsById(id) ? "SUCCESS":"FAILURE")
                 .build();
     }
 
 
     @Override
     public Messenger modify(UserDto t) {
-        var user = repository.findById(t.getId()).get();
-        user.setPassword(t.getPassword());
-        user.setPhone(t.getPhone());
-        user.setJob(t.getJob());
-        repository.save(user);
+        Optional<User> user = repository.findById(t.getId());
+
+        if(user.isEmpty()){
+            return Messenger.builder()
+                    .message("FAILURE")
+                    .build();
+        }
+        user.get().setPassword(t.getPassword());
+        user.get().setPhone(t.getPhone());
+        user.get().setJob(t.getJob());
+        repository.save(user.get());
         return Messenger.builder()
-                .message("회원정보 수정 성공"+t.getName())
+                .message("SUCCESS")
                 .build();
     }
     @Override
@@ -85,8 +90,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByUsername(String username) {
-        return repository.findByUsername(username);
+    public Optional<UserDto> findUserInfo(String accessToken) {
+        String splitToken = accessToken.substring(7);
+        Long id = jwtProvider.getPayload(splitToken).get("id", Long.class);
+
+        return Optional.of(entityToDto(repository.findById(id).orElseThrow()));
     }
 
     @Override
@@ -103,6 +111,11 @@ public class UserServiceImpl implements UserService {
 
         return true;
 
+    }
+
+    @Override
+    public Optional<User> findUserByName(String name) {
+        return Optional.empty();
     }
 
     //SRP 에 따라 아이디 존재 여부를 프론트에서 먼저 판단하고, 넣어옴 (시큐리티 )

@@ -7,14 +7,17 @@ import LinkButton, { linkButtonTitles } from '@/app/atoms/buttons/LinkButton';
 import { useEffect, useState } from 'react';
 import { destroyCookie, parseCookies } from 'nookies';
 import { useDispatch, useSelector } from "react-redux";
-import { findLogout } from '../../user/service/user-service';
+import { findLogout, findUserById, findUserByUsername, findUserInfo } from '../../user/service/user-service';
 import Link from 'next/link';
+import { jwtDecode } from 'jwt-decode';
+import { getUserJson } from '../../user/service/user-slice';
 
 
 function ResponsiveAppBar() {
   const [showProfile,setShowProfile]=useState(false);
   const dispatch=useDispatch();
   const router=useRouter();
+  const userInfo=useSelector(getUserJson);
 
   router.refresh
   
@@ -23,6 +26,7 @@ function ResponsiveAppBar() {
     if(parseCookies().accessToken !==''){
       console.log('showProfile:true');
       setShowProfile(true)
+      dispatch(findUserById(jwtDecode<any>(parseCookies().accessToken).id))
     }else{
       console.log('showProfile:false');
       setShowProfile(false);
@@ -56,8 +60,8 @@ function ResponsiveAppBar() {
       </button>}
       {showProfile &&
           <div className="flex px-4 py-3 float-end">
-            <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400 mx-5">name@flowbite.com</span>
+            <span className="block text-sm text-gray-900 dark:text-white">{userInfo.name}</span>
+            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400 mx-5">{userInfo.username}@flowbite.com</span>
             <span 
             className="block text-sm  text-gray-500 truncate dark:text-gray-400"
             onClick={logoutHandler}><Link href="#">로그아웃</Link>  
