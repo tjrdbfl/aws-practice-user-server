@@ -39,9 +39,7 @@ export default function MyListPage (props:any) {
       dispatch(findDeleteById(selectedId))
       .then((res:any)=>{
         if(res.payload.message==='SUCCESS'){
-          location.reload();
           alert('게시글 삭제를 성공하셨습니다.')
-          
         }else{
           alert('게시글 삭제를 실패하셨습니다.')
         }

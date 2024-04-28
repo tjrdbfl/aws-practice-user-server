@@ -10,18 +10,37 @@ import { findDeleteById, findLogout, findUserById, findUserInfo, findUserModify 
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AttachFile, ElevatorSharp, FmdGood, ThumbUpAlt } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { MyTypography } from "@/app/components/common/style/cell";
 import { getUserJson } from "@/app/components/user/service/user-slice";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { destroyCookie } from "nookies";
+import "./../user-detail.css";
 
+interface IFormValues{
+  id: number;
+  username: string;
+  password: string;
+  name: string;
+  phone: string;
+  job: string;
+}
 
 export default function userDetailPage(props: any) {
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({
+    defaultValues:{
+      id: 0,
+      username: "",
+      password: "",
+      name: "",
+      phone: "",
+      job: ""
+    },mode:"onTouched"
+   , shouldFocusError:false
+  });
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -38,9 +57,11 @@ export default function userDetailPage(props: any) {
     router.back();
   }
 
-  const onSubmit = (user: IUser) => {
+  const onSubmit:SubmitHandler<IFormValues>=(user: IUser,event:any)=>{
+    event.preventDefault();
     dispatch(findUserModify(user))
       .then((res: any) => {
+        console.log(res.payload)
         if(res?.payload==='SUCCESS'){
           alert("회원 정보 수정 완료");
           router.push(`${PG.BOARD}/list`);
@@ -49,7 +70,9 @@ export default function userDetailPage(props: any) {
         }
       })
       .catch((error: any) => {
-
+        alert("회원 정보 수정 실패");
+      }).finally(()=>{
+        location.reload();
       });
   }
 
@@ -71,71 +94,96 @@ export default function userDetailPage(props: any) {
       })
   }
 
+  // const validateOnMount=(value,defaultValue)=>{
+  //   if(value===defaultValue) return null;
+  // }
+
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className=" max-w-md mx-auto mb-10 mt-10">
-        <label htmlFor="large" className="block mb-2 text-base font-medium text-gray-900 dark:text-white">Large select</label>
-        <div className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl">
-          {MyTypography('회원 정보 수정', "1.5rem")}
+      <form onSubmit={handleSubmit(onSubmit)} className=" max-w-xl mx-auto mb-10 mt-10">
+        <label htmlFor="large" className="text-base font-medium text-gray-900 dark:text-white">Large select</label>
+        <div className="editor mx-auto w-11/12 flex flex-col text-gray-800 border border-gray-300 p-7 shadow-lg">
+          <h1 className="text-2xl font-bold text-center mb-7">회원 정보 수정</h1>
           <input
-            {...register('id', { required: true })}
-            type="hidden" value={props.params.id} />
-          <div className="username-wrapper">
+            {...register('id')}
+            type="hidden" 
+            defaultValue={props.params.id} />
+         
+            <label className="input_text_label">아이디</label><br/>
             <input
-              {...register('username', { required: true })}
-              className="username mt-2 bg-gray-100 border border-gray-300 p-2 mb-4 outline-none" type="text" value={userInfo.username} readOnly
+              {...register('username')}
+              className="input_className" 
+              type="text" 
+              defaultValue={userInfo.username} 
+              readOnly
             />
-            <span className="hover-message">Hover message here</span>
-          </div>
-          <input
-            {...register('password', { required: true, maxLength: 20 })}
-            className="password bg-gray-100 border border-gray-300 p-2 mb-4 outline-none"
-            placeholder="Password"
-            type="text"
-            name="password"
-            defaultValue={userInfo.password} />
-          <input
-            {...register('name', { required: true, maxLength: 20 })}
-            className="name bg-gray-100 border border-gray-300 p-2 mb-4 outline-none"
-            placeholder="Name"
-            type="text"
-            name="name"
-            defaultValue={userInfo.name} />
-          <input
-            {...register('phone', { required: true, maxLength: 20 })}
-            className="phone bg-gray-100 border border-gray-300 p-2 mb-4 outline-none"
-            placeholder="Phone"
-            type="text"
-            name="phone"
-            defaultValue={userInfo.phone} />
-          <input
-            {...register('job', { required: true, maxLength: 20 })}
-            className="job bg-gray-100 border border-gray-300 p-2 mb-4 outline-none"
-            placeholder="Job"
-            type="text"
-            name="job"
-            defaultValue={userInfo.job} />
+            <p className=" text-green-600 font-semibold">수정할 수 없습니다.</p>
+
+            <label className="input_text_label">비밀번호</label><br/>
+            <input
+              {...register('password', {maxLength: 20,required:"반드시 입력해주세요.",pattern:{
+                  value:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[()%@'*|=${.}?/!<>+_#*]).{8,20}$/g,
+                  message:"잘못된 형식의 비밀번호 입니다(최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상)",
+              }
+          // ,validate:{validateOnMount(defau)}
+            })}
+              className="input_className"
+              placeholder="Password"
+              type="text"
+              name="password"
+              defaultValue={userInfo.password} 
+            />
+            {errors?.password? <p className="error_msg">{errors.password.message}</p>:null}
+
+            <label className="input_text_label">이름</label><br/>
+            <input
+            {...register('name', { required:"반드시 입력해주세요.",minLength:{value:3,message:"3글자 이상 입력해주세요"}})}
+             className="input_className"
+             placeholder="Name"
+             type="text"
+             name="name"
+             defaultValue={userInfo.name}
+            />
+            {errors?.name? <p className="error_msg">{errors.name.message}</p>:null}
+
+            <label className="input_text_label">전화번호</label><br/>
+            <input
+             {...register('phone', { maxLength: 20, required:"반드시 입력해주세요."
+            //  ,pattern:{
+            //   value:/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+            //   message:"휴대전화 번호 형식에 맞게 작성해주세요.(010-0000-0000)"
+            //  } 
+            })}
+             className="input_className"
+             placeholder="Phone"
+             type="text"
+             name="phone"
+             defaultValue={userInfo.phone}
+            />
+            {errors?.phone? <p className="error_msg">{errors.phone.message}</p>:null}
+
+            <label className="input_text_label">직업</label><br/>
+            <input
+             {...register('job', { maxLength: 20,required:"반드시 입력해주세요." })}
+             className="input_className"
+             placeholder="Job"
+             type="text"
+             name="job"
+             defaultValue={userInfo.job}
+            />
+             {errors?.job? <p className="error_msg">{errors.job.message}</p>:null}
 
           {/* <!-- buttons --> */}
-          <div className="buttons flex justify-center gap-5">
-            <div className="btn justify-items-center overflow-hidden relative w-30 bg-white text-blue-500 p-3 px-4 rounded-xl font-bold uppercase -- behtmlFore:block behtmlFore:absolute behtmlFore:h-full behtmlFore:w-1/2 behtmlFore:rounded-full
-          behtmlFore:bg-pink-400 behtmlFore:top-0 behtmlFore:left-1/4 behtmlFore:transition-transhtmlForm behtmlFore:opacity-0 behtmlFore:hover:opacity-100 hover:text-200 hover:behtmlFore:animate-ping transition-all duration-00
-          border border-gray-300 shadow-lg text-lg
-          hover:bg-blue-100 focus:shadow-outline focus:outline-none
-          "
+          <div className="buttons flex justify-center gap-5 mt-7">
+            <div className="btn_click"
               onClick={handleCancel}>취소</div>
             <input
               type="submit" value="수정"
-              className="btn  overflow-hidden relative w-30 bg-white text-blue-500 p-3 px-4 rounded-xl font-bold uppercase -- behtmlFore:block behtmlFore:absolute behtmlFore:h-full behtmlFore:w-1/2 behtmlFore:rounded-full
-          behtmlFore:bg-pink-400 behtmlFore:top-0 behtmlFore:left-1/4 behtmlFore:transition-transhtmlForm behtmlFore:opacity-0 behtmlFore:hover:opacity-100 hover:text-200 hover:behtmlFore:animate-ping transition-all duration-00
-          border border-gray-300 shadow-lg text-lg
-          hover:bg-blue-100 focus:shadow-outline focus:outline-none"
+              className="btn_click"
             />
           </div>
         </div>
-        <div className="btn justify-items-center overflow-hidden relative ml-24 max-w-60 my-10 bg-blue-500 text-white text-center p-3 mx-16 rounded-xl text-xl font-bold uppercase -- behtmlFore:block behtmlFore:absolute behtmlFore:h-full behtmlFore:w-1/2 behtmlFore:rounded-full
-          behtmlFore:bg-pink-400 behtmlFore:top-0 behtmlFore:left-1/4 behtmlFore:transition-transhtmlForm behtmlFore:opacity-0 behtmlFore:hover:opacity-100 hover:text-200 hover:behtmlFore:animate-ping transition-all duration-00
-          border border-gray-300 shadow-lg hover:bg-blue-400 focus:shadow-outline focus:outline-none"
+        <div className="btn_withDrawal"
           onClick={handleWithDrawal}>회원 탈퇴</div>
       </form>
 

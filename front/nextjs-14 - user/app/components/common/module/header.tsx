@@ -27,13 +27,12 @@ function ResponsiveAppBar() {
       setShowProfile(true)
       token=parseCookies().accessToken;
       token? dispatch(findUserById(jwtDecode<any>(token).id )): router.push('/');
-      router.refresh();
+      
     }else{
       console.log('showProfile:false');
       setShowProfile(false);
-      router.refresh();
     }
-  },[parseCookies().accessToken])
+  },[])
 
   const logoutHandler=()=>{
     console.log('로그아웃 적용 전');
@@ -46,7 +45,6 @@ function ResponsiveAppBar() {
       router.push('/');
     }) 
     .catch((err:any)=>{
-      setShowProfile(true)
       console.log('로그아웃 실행에서 에러 발생'+err);
     }).finally(()=>{
       router.refresh();

@@ -86,10 +86,10 @@ const UpdateArticlePage: NextPage = (props:any) => {
         {MyTypography('Article 작성', "1.5rem")}
         <input 
          {...register('id',{required:true})}
-        type="hidden" value={props.params.id} />
+        type="hidden" defaultValue={props.params.id} />
         <input 
          {...register('writerId',{required:true})}
-        type="hidden" value={`${jwtDecode<any>(parseCookies().accessToken).id}`} />
+        type="hidden" defaultValue={`${jwtDecode<any>(parseCookies().accessToken).id}`} />
         <input className="writerId bg-gray-100 border border-gray-300 p-2 mb-4 outline-none" type="text" value={`작성자 : ${jwtDecode<any>(parseCookies().accessToken).username}`} readOnly
         />
         <input 
