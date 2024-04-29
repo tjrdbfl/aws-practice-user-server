@@ -49,9 +49,14 @@ public class UserServiceImpl implements UserService {
                     .message("FAILURE")
                     .build();
         }
-        user.get().setPassword(t.getPassword());
-        user.get().setPhone(t.getPhone());
-        user.get().setJob(t.getJob());
+        if(t.getPassword()!=null)
+         user.get().setPassword(t.getPassword());
+        if(t.getName()!=null)
+            user.get().setName(t.getName());
+        if(t.getPhone()!=null)
+            user.get().setPhone(t.getPhone());
+        if(t.getJob()!=null)
+            user.get().setJob(t.getJob());
         repository.save(user.get());
         return Messenger.builder()
                 .message("SUCCESS")

@@ -12,7 +12,11 @@ export const findUserById: any = createAsyncThunk(
     async (id: number) => (await findUserByIdAPI(id))
 )
 export const findUserModify: any = createAsyncThunk( 
-    'users/findUserModify',                      
+    'users/findUserModify',   
+    //unique identifier for the asynchronous thunk action
+    //Async Thunk Naming Convention: 'domain/actionName'
+    //'action name' : Use kebab-case
+    //use 'fetch' ex) 'fetch-user-modify' for data fetching or asynchronous operations
     async (user: IUser) =>(await findUserModifyAPI(user))
 )
 export const findDeleteById: any = createAsyncThunk( 

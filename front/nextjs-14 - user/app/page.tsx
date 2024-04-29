@@ -20,7 +20,6 @@ export default function Home() {
 
   const [user, setUser] = useState({} as IUser)
   const [length, setLength] = useState({ "idLength": false, "pwLength": false })
-
   //useRef : 초기화
   const idRef=useRef<HTMLInputElement>(null);
   const pwRef=useRef<HTMLInputElement>(null);

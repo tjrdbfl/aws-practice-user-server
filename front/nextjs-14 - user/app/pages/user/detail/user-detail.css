@@ -11,7 +11,7 @@
 }
 
 .btn_withDrawal{
-  @apply justify-items-center overflow-hidden relative ml-6 w-11/12 my-10 bg-blue-500 text-white text-center p-3 rounded-xl text-xl font-bold shadow-lg
+  @apply justify-items-center overflow-hidden relative ml-6 w-11/12 my-10 bg-blue-500 text-white text-center p-4 rounded-xl text-2xl font-bold shadow-lg h-16
 }
 .btn_withDrawal:hover{
   @apply  border-gray-300 shadow-lg bg-blue-400 transition-all duration-75

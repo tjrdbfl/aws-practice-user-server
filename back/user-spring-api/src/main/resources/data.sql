@@ -1,5 +1,8 @@
 select * from users;
 
+# delete from users where id=1;
+# update users set password='pO2(eO73)%@' where id=1;
+
 # insert into users (id, username, password, name, phone, job, mod_date, reg_date) values (1, 'dmcclure0', 'pO2(eO73)%@', 'Devondra McClure', '134-221-0694', 'Financial Analyst', '2023-04-08 18:34:19', '2023-12-31 06:36:58');
 # insert into users (id, username, password, name, phone, job, mod_date, reg_date) values (2, 'cmasterson1', 'bE0''*PeV|k=H=', 'Cesar Masterson', '125-693-1152', 'VP Sales', '2024-03-11 00:53:52', '2023-12-08 13:55:58');
 # insert into users (id, username, password, name, phone, job, mod_date, reg_date) values (3, 'scurbishley2', 'rZ4${k.YiMf}3I7I', 'Sansone Curbishley', '636-360-1862', 'Environmental Specialist', '2023-10-08 23:58:44', '2023-06-05 04:39:48');

@@ -20,8 +20,6 @@ public class Article extends BaseEntity {
     private String title;
     private String content;
 
-
-
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private User writer;
