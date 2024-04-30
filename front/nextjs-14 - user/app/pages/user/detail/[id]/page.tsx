@@ -30,7 +30,7 @@ interface IFormValues {
 
 export default function userDetailPage(props: any) {
 
-  const { register, handleSubmit, formState: { errors, isDirty,isValid }, setValue } = useForm<IFormValues>({
+  const { register, handleSubmit, formState: { errors, isDirty,isValid,dirtyFields }, setValue } = useForm<IFormValues>({
     shouldFocusError: false
   });
 
@@ -67,6 +67,7 @@ export default function userDetailPage(props: any) {
     setValue("phone", userInfo.phone);
     setValue("job", userInfo.job);  
   }
+  
  
   const onSubmit: SubmitHandler<IFormValues> = (user: IUser, event: any) => {
 
@@ -133,7 +134,7 @@ export default function userDetailPage(props: any) {
           <label className="input_text_label">비밀번호</label><br />
           <input
             {...register('password', {
-              maxLength: 20, required:"반드시 입력해주세요."
+              maxLength: 20, required:true
               , pattern: {
                 value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[()%@'*|=${.}?/!<>+_#*]).{8,20}$/g,
                 message: "잘못된 형식의 비밀번호 입니다(최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상)",
@@ -181,7 +182,7 @@ export default function userDetailPage(props: any) {
 
           <label className="input_text_label">직업</label><br />
           <input
-            {...register('job', { maxLength: 20, required: true  })}
+            {...register('job', { maxLength: 20, required: "필수로 입력해야 합니다."  })}
             ref={jobCheck}
             className="input_className"
             placeholder="Job"
